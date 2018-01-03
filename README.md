@@ -39,11 +39,13 @@ To further enforce the effect of conditioning, one may also want to include a ti
 
 # Download
 
-WIP
+## [Windows Doges](https://www.dropbox.com/s/i7cllblo9sg3v37/smartDogeUtilityEXE_0.0.1.zip?dl=0)
+## [Apple Doges](https://www.dropbox.com/s/3pqe1a405dyfs79/smartDogeUtilityOSX_0.0.1.zip?dl=0)
+## [Linux Doges](https://www.dropbox.com/s/crviykkjlufmwtw/smartDogeUtility.love?dl=0) (requires [LÖVE](http://love2d.org) to be installed)
 
 # Smartphone? Smartdoge! Smartphone!
 
-WIP
+Download the [love file](https://www.dropbox.com/s/crviykkjlufmwtw/smartDogeUtility.love?dl=0) and transfer it to your smartphone. You need to download the love2d app from the playstore to run it.
 
 ---
 # Credits
