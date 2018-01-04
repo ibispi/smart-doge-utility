@@ -33,7 +33,7 @@ Although smartDogeUtility can be used only for goal-management and planning, it 
 
 The general idea is that certain activities one aims to do are not as interesting as some other ones. So, we tend to do the latter, we do things that are not useful to us just because they are more fun - in other words, we procrastinate. So, smartDogeUtility requires of you to NOT do those activities at all, unless - here's the twist - unless it allows you to do so! Upon completing an activity you will be rewarded one or more tickets, which allow you to do random pre-determined activities (ones you pre-determine). This way you will associate the fun of these activities with the possibly boring goals.
 
-![ticket page](https://i.imgur.com/xg1pwss.png)
+![ticket page](https://i.imgur.com/pwR7pnG.png)
 
 To further enforce the effect of conditioning, one may also want to include a ticket that doesn't give you any sort of reward. It is scientifically proven that if a person is rewarded randomly, sometimes yes, sometimes not, the addiction becomes stronger. Stay strong, my doges.
 
