@@ -2,8 +2,6 @@
 
 ![icon](https://i.imgur.com/efTC38v.png)
 
-### WARNING: Very likely buggy
-
 SmartDogeUtility is a program made in [LÖVE](http://love2d.org) which purpose is to increase your productivity through the use of [smart](https://en.wikipedia.org/wiki/SMART_criteria) goals and conditioning.
 SmartDogeUtility is a program primarily made to be used on smartphones, however it also
 works on desktop devices and other platforms supported by [LÖVE](http://love2d.org). Doges recommend [LÖVE](http://love2d.org).
