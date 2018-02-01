@@ -9,7 +9,7 @@ works on desktop devices and other platforms supported by [LÖVE](http://love2d.
 ![dogs](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Cassius_Marcellus_Coolidge_-_Poker_Game_%281894%29.png/289px-Cassius_Marcellus_Coolidge_-_Poker_Game_%281894%29.png "An image of smart doges.")
 
 # HOW TO BE A SMART DOGE 101:
----
+
 ## SMART goals
 
 The main purpose of smartDogeUtility is to set and track smart goals.
