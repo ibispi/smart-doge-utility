@@ -45,7 +45,7 @@ To further enforce the effect of conditioning, one may also want to include a ti
 
 # Smartphone? Smartdoge! Smartphone!
 
-Download the [love file](https://www.dropbox.com/s/crviykkjlufmwtw/smartDogeUtility.love?dl=0) and transfer it to your smartphone. You need to download the love2d app from the playstore to run it.
+Download the [love file](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.2/smartDogeUtility_0.0.2.love) and transfer it to your smartphone. You need to download the love2d app from the playstore to run it.
 
 ---
 # Credits
