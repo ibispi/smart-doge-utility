@@ -4,6 +4,205 @@
 
 function love.load()
 
+	pPPointsShown = false
+
+	productivityPts = {  }
+	--for each registered year you need a function that adds this year to the register
+
+	local currentHour = tonumber(os.date("%H"))
+	local currentMin = tonumber(os.date("%M"))
+	local currentDay = tonumber(os.date("%d"))
+	local currentMonth = tonumber(os.date("%m"))
+	local currentYear = tonumber(os.date("%Y"))
+
+
+function getHighestNumberOfXMonths (xMonths, xYear, previousHighestNumber)
+
+	local highestNumber = 0
+	if previousHighestNumber ~= nil then
+		highestNumber = previousHighestNumber
+	end
+
+	local previousYearCount = 0
+
+	local currentMonth = tonumber(os.date("%m"))
+	local currentYear = tonumber(os.date("%Y"))
+
+	if xYear ~= nil then
+		currentMonth = 12
+		currentYear = xYear
+	end
+
+		if productivityPts[currentYear] ~= nil then
+
+			if productivityPts[currentYear][currentMonth] ~= nil then
+
+				for someMonth = currentMonth-xMonths, currentMonth, 1 do
+					if productivityPts[currentYear][someMonth] ~= nil then
+						for someDay = 1, #productivityPts[currentYear][someMonth], 1 do
+							if productivityPts[currentYear][someMonth][someDay] > highestNumber then
+								highestNumber = productivityPts[currentYear][someMonth][someDay]
+							end
+						end
+					else
+						previousYearCount = previousYearCount + 1
+					end
+				end
+
+				if previousYearCount ~= 0 then
+					if productivityPts[currentYear-1] ~= nil then
+
+						getHighestNumberOfXMonths (previousYearCount, currentYear-1, highestNumber)
+
+					end
+				end
+			end
+	end
+			return highestNumber
+end
+
+	function getGraphData ()
+
+		if productivityPts ~= nil then
+
+			local graphData = {}
+			-- 1. max ever, 2. last five years, 3. last year, 4. last 6 months, 5. last month, 6. last 7 days and today (5+8=13) graphsToBeDrawn
+			local currentYear = tonumber(os.date("%Y"))
+			local currentMonth = tonumber(os.date("%m"))
+			local currentDay = tonumber(os.date("%d"))
+
+			for _ = 1, 13, 1 do
+				graphData[_] = 0
+			end
+
+			graphData[1] = getHighestNumberOfXMonths(2000)
+			graphData[2] = getHighestNumberOfXMonths(60)
+			graphData[3] = getHighestNumberOfXMonths(12)
+
+			if productivityPts[currentYear] ~= nil then
+
+				if productivityPts[currentYear][currentMonth] ~= nil then
+
+					local highestNumber = 0
+					local previousYearCount = 0
+					for someMonth = currentMonth-5, currentMonth, 1 do
+						if productivityPts[currentYear][someMonth] ~= nil then
+							for someDay = 1, #productivityPts[currentYear][someMonth], 1 do
+								if productivityPts[currentYear][someMonth][someDay] > highestNumber then
+									highestNumber = productivityPts[currentYear][someMonth][someDay]
+								end
+							end
+						else
+							previousYearCount = previousYearCount + 1
+						end
+					end
+
+					if previousYearCount ~= 0 then
+						if productivityPts[currentYear-1] ~= nil then
+
+							for someMonth = 12-previousYearCount, 12, 1 do
+								if productivityPts[currentYear-1][someMonth] ~= nil then
+									for someDay = 1, #productivityPts[currentYear-1][someMonth], 1 do
+										if productivityPts[currentYear-1][someMonth][someDay] > highestNumber then
+											highestNumber = productivityPts[currentYear-1][someMonth][someDay]
+										end
+									end
+								end
+							end
+
+						end
+					end
+					graphData[4] = highestNumber
+
+
+					local highestNumber = 0
+					for _ = 1, #productivityPts[currentYear][currentMonth], 1 do
+						if productivityPts[currentYear][currentMonth][_] > highestNumber then
+							highestNumber = productivityPts[currentYear][currentMonth][_]
+						end
+					end
+					graphData[5] = highestNumber
+
+					local extraDays = 0
+					for _ = 6, 13, 1 do
+
+						local theExactNum = currentDay-(13-_)
+
+						if productivityPts[currentYear][currentMonth][theExactNum] ~= nil then
+							graphData[_] = productivityPts[currentYear][currentMonth][theExactNum]
+						else
+							extraDays = extraDays + 1
+						end
+
+					end
+
+					if extraDays ~= 0 then
+						extraDays = extraDays-1
+						local extraDayNum = 6
+						if productivityPts[currentYear][currentMonth-1] ~= nil then
+							for thisDay = #productivityPts[currentYear][currentMonth-1]-extraDays, #productivityPts[currentYear][currentMonth-1], 1 do
+								graphData[extraDayNum] = productivityPts[currentYear][currentMonth-1][thisDay]
+								extraDayNum = extraDayNum + 1
+							end
+						elseif productivityPts[currentYear-1][12] ~= nil then
+							for thisDay = #productivityPts[currentYear-1][12]-extraDays, #productivityPts[currentYear-1][12], 1 do
+								graphData[extraDayNum] = productivityPts[currentYear][currentMonth-1][thisDay]
+								extraDayNum = extraDayNum + 1
+							end
+						else
+							extraDayNum = extraDayNum + 1
+						end
+					end
+
+				end
+			end
+			return graphData
+		end
+
+	end
+
+	function checkPPYear () --checks if the current year is not in PP and if so adds it...
+
+		if love.filesystem.exists("productivityPts.txt") then
+			productivityPts = serializer.load("productivityPts.txt")
+		end
+
+		if productivityPts == nil then productivityPts = {} end
+
+		local currentYear = tonumber(os.date("%Y"))
+
+		if productivityPts[currentYear] == nil then
+
+			local febLength = howLongIsFebruary (currentYear)
+
+			local currentYearTable = {}
+
+			local yearMonthLength = { 31, febLength, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+
+			for someMonth = 1, #yearMonthLength, 1 do
+				currentYearTable[someMonth] = {}
+				for someDay = 1, yearMonthLength[someMonth], 1 do
+					table.insert (currentYearTable[someMonth], 0)
+				end
+
+			end
+
+			table.insert(productivityPts, currentYear, currentYearTable)
+
+			if productivityPts ~= nil then
+
+				productivityPts._fileName = "productivityPts.txt"
+				serializer.save(productivityPts)
+
+				--local serializedTable = serializer.encode(productivityPts)
+				--love.filesystem.write("productivityPts.lua", serializedTable)
+			end
+
+		end
+
+	end
+
+
 	xCursor = 0
 	yCursor = 0
 
@@ -45,6 +244,8 @@ function love.load()
 
 
 	function load()
+
+
 
 		if love.filesystem.exists("smartDogeSaveFile") then
 
@@ -385,7 +586,16 @@ function love.load()
 
 	end
 
-	function save()
+	function save ()
+
+		if productivityPts ~= nil then
+
+			productivityPts._fileName = "productivityPts.txt"
+			serializer.save(productivityPts)
+
+			--love.filesystem.write("productivityPts.lua", serializedTable)
+		end
+
 		local dataToBeSaved = ""
 		-- ~ is used at the beginning of every important line because the player can't type ~
 
@@ -582,6 +792,7 @@ function love.load()
 	end
 
 	addingDumbGoal = false--if true it allows you to pick a level for the goal
+	clickingBox = {}
 	addingSmartGoal = false
 	viewingGoals = false
 	viewingGoalPart = "Info"
@@ -672,6 +883,8 @@ function love.load()
 	local add_image = require "0modules0.add_image"
 	local copy = require "0modules0.copy"
 
+
+
 directoryContent = {}
 
 amountToFit = 1
@@ -685,7 +898,59 @@ buttonFunction = {
 	[1] = function () --undo
 
 	end,
-	[2] = function () --redo
+	[2] = function () --pPPoints (used to be redo)
+
+		if pPPointsShown == false then
+
+			graphsToBeDrawn = getGraphData ()
+
+			if graphsToBeDrawn ~= nil then
+
+				pPPointsShown = true
+				viewingGoals = false
+				editingGoals = false
+				addingDumbGoal = false
+				clickingBox = {}
+				addingSmartGoal = false
+				ticketVaultOpen = false
+				ticketInventoryOpen = false
+				addClickingBoxes = false
+				clickingBox = {}--has to be emptied every time
+				editingTicket = false
+				keyboardInput = false
+				completingAGoal = false
+				asIfReturnWasPressed = true
+				editingDescription = false
+
+			end
+
+		elseif pPPointsShown == true then
+
+			pPPointsShown = true
+			viewingGoals = false
+			editingGoals = false
+			addingDumbGoal = false
+			clickingBox = {}
+			addingSmartGoal = false
+			ticketVaultOpen = false
+			ticketInventoryOpen = false
+			addClickingBoxes = false
+			clickingBox = {}--has to be emptied every time
+			editingTicket = false
+			keyboardInput = false
+			completingAGoal = false
+			asIfReturnWasPressed = true
+			editingDescription = false
+			clickingBox = {}--has to be emptied every time
+			pPPointsShown = false
+			manuallyViewingGoalSelected = 0
+			asIfReturnWasPressed = true
+			viewingGoals = false
+			editingGoals = false
+			editingTicket=false
+			editingDescription = false
+
+		end
 
 	end,
 	[3] = function () --newDumbGoal
@@ -718,7 +983,6 @@ buttonFunction = {
 
 		if ticketInventoryOpen == false and ticketVaultOpen == false then
 			ticketInventoryOpen = true
-
 			addClickingBoxes = true
 			clickingBox = {}--has to be emptied every tim
 
@@ -757,6 +1021,7 @@ buttonFunction = {
 				completingAGoal = true
 				editingTicket=false
 
+
 				notChosenTableForCompletion = true
 
 				--[[
@@ -774,6 +1039,7 @@ buttonFunction = {
 			end
 		else
 			if ticketVaultOpen == true then
+
 				ticketInventoryOpen = true
 
 				addClickingBoxes = true
@@ -790,6 +1056,7 @@ buttonFunction = {
 				asIfReturnWasPressed = true
 				editingDescription = false
 			else
+
 				addClickingBoxes = true
 				clickingBox = {}--has to be emptied every tim
 
@@ -811,6 +1078,7 @@ buttonFunction = {
 	[7] = function () --view
 		if ticketInventoryOpen == false and ticketVaultOpen == false then
 			if viewingGoals == true and editingGoals == false then
+
 				addClickingBoxes = true
 				clickingBox = {}--has to be emptied every tim
 
@@ -822,6 +1090,7 @@ buttonFunction = {
 				editingDescription = false
 			else
 				if goal[selectedGoal[1]] ~= nil then
+
 					addClickingBoxes = true
 					clickingBox = {}--has to be emptied every tim
 
@@ -840,6 +1109,7 @@ buttonFunction = {
 		if ticketInventoryOpen == false then
 			if ticketVaultOpen == false then
 				if editingGoals == true then
+
 					addClickingBoxes = true
 					clickingBox = {}--has to be emptied every tim
 
@@ -866,6 +1136,7 @@ buttonFunction = {
 			else
 				if editingTicket == true then
 
+
 					addClickingBoxes = true
 					clickingBox = {}--has to be emptied every tim
 
@@ -881,6 +1152,7 @@ buttonFunction = {
 					editingDescription = false
 				else
 					if ticketVault[1]~=nil then
+
 						manuallyViewingGoalSelected = 0
 						viewingGoals = false
 						editingGoals = false
@@ -913,8 +1185,10 @@ buttonFunction = {
 	[10] = function () --delete
 		if ticketInventoryOpen == false and editingTicket == false and editingGoals == false and
 		viewingGoals == false and editingDescription == false then
+
 			if ticketVaultOpen == true then
 				if ticketVault[selectedTicket] ~= nil then
+
 					table.remove(ticketVault, selectedTicket)
 					save()
 					if selectedTicket ~= 1 then selectedTicket = selectedTicket - 1 end
@@ -1043,6 +1317,8 @@ function howLongIsFebruary (year)
 	else if (year is not divisible by 400) then (it is a common year)
 	else (it is a leap year)]]
 end
+
+checkPPYear()
 
 function addTicketToVault () --adds a ticket to the ticket pool that you can draw later
 
@@ -1321,12 +1597,14 @@ elseif (addingDumbGoal == true or addingSmartGoal == true) and editingGoals == f
 		elseif addingSmartGoal == true then
 			addGoal ("specific", goal)
 			save()
+			clickingBox = {}
 			addingSmartGoal = false
 		end
 		--1 it is
 
 	elseif xCursor>= theXWhere[2] and xCursor <= theXWhere[2]+plusWidth and
 	yCursor>=theYWhere and yCursor<=theYBottom then
+
 		if goal[selectedGoal[1]] ~= nil then
 			if goal[selectedGoal[1]].goal ~= nil then
 				if addingDumbGoal == true then
@@ -1336,14 +1614,18 @@ elseif (addingDumbGoal == true or addingSmartGoal == true) and editingGoals == f
 				elseif addingSmartGoal == true then
 					addGoal ("specific", goal[selectedGoal[1]].goal)
 					save()
+					clickingBox = {}
 					addingSmartGoal = false
 				end
 		--print("2 it is")
 			else
+
+				clickingBox = {}
 				addingSmartGoal = false
 				addingDumbGoal = false
 			end
 		else
+			clickingBox = {}
 			addingSmartGoal = false
 			addingDumbGoal = false
 		end
@@ -1359,28 +1641,37 @@ elseif (addingDumbGoal == true or addingSmartGoal == true) and editingGoals == f
 							--adds a smart goal every time regardless of the choice
 							addGoal ("specific", goal[selectedGoal[1]].goal[selectedGoal[2]].goal)
 							save()
+							clickingBox = {}
 							addingSmartGoal = false
 							addingDumbGoal = false
 						end
 		--print("3 it is")
 								--third goal is added
 					else
+						clickingBox = {}
 						addingSmartGoal = false
 						addingDumbGoal = false
 					end
 				else
+					clickingBox = {}
 					addingSmartGoal = false
 					addingDumbGoal = false
 				end
 			else
+				clickingBox = {}
 				addingSmartGoal = false
 				addingDumbGoal = false
 			end
 		else
+			clickingBox = {}
 			addingSmartGoal = false
 			addingDumbGoal = false
 		end
 
+	else
+		clickingBox = {}
+		addingSmartGoal = false
+		addingDumbGoal = false
 	end
 
 elseif yCursor > 83 and goal[1] ~= nil and yCursor < UI.gapBetweenGoalsY+83+UI.introductoryGoalGap+UI.heightOfRect+UI.gapBetweenGoalsY and
@@ -1838,7 +2129,6 @@ if yCursor < UI.gapBetweenGoalsY+83 then
 end
 
 --------------------------------------------------------------------------------
-
 end
 
 
@@ -1879,9 +2169,13 @@ function love.update(dt)
 	love.graphics.rectangle( "fill", 0, 0, 800, 82)
 	love.graphics.setColor( 255, 255, 255, 255 )
 
+	love.graphics.draw(UI.icons.generalButtons.redo, 17+5*1+72, 5)
+
 	if ticketVaultOpen == false and ticketInventoryOpen == false then
 		--love.graphics.draw(UI.icons.generalButtons.undo, 17, 5)
-		--love.graphics.draw(UI.icons.generalButtons.redo, 17+5*1+72, 5)
+
+
+
 		if editingGoals == false and viewingGoals == false then
 			love.graphics.draw(UI.icons.newGoalButtons.newDumbGoal, 17+5*2+72*2, 5)
 			love.graphics.draw(UI.icons.newGoalButtons.newSmartGoal, 17+5*3+72*3, 5)
@@ -2338,6 +2632,88 @@ function love.update(dt)
 
 		love.graphics.setCanvas()
 
+	elseif pPPointsShown == true then
+
+		if graphsToBeDrawn ~= nil then
+			love.graphics.setCanvas(awesomecanvas)
+
+			local pPWidth = animationCanvas.width/(13*2)
+			pPWidth = math.floor(pPWidth)
+			local defaultBiggestPPHeight = 30
+			local screenHeightForGraphs = 400
+
+			local maxPointsDrawn = 0
+			for aGraph = 1, #graphsToBeDrawn, 1 do
+				if graphsToBeDrawn[aGraph] > maxPointsDrawn then
+					maxPointsDrawn = graphsToBeDrawn[aGraph]
+				end
+			end
+
+			if (screenHeightForGraphs-100)/maxPointsDrawn < defaultBiggestPPHeight then
+				defaultBiggestPPHeight = (screenHeightForGraphs-100)/maxPointsDrawn
+				defaultBiggestPPHeight = math.floor(defaultBiggestPPHeight)
+			end
+
+			for aGraph = 1, #graphsToBeDrawn, 1 do
+				local currentLocationX = ((aGraph-1)*pPWidth*2)+pPWidth
+				local currentLocationY = screenHeightForGraphs-defaultBiggestPPHeight
+
+				love.graphics.setColor(0,0,0,150)
+
+				if aGraph ~= 1 then
+					local lineX = (currentLocationX-pPWidth/2)
+					lineX = math.floor(lineX)
+					love.graphics.line(lineX, 85, lineX, 475)
+				end
+
+				love.graphics.setColor(UI.color.percentage)
+				love.graphics.setFont(smallerFont)
+				love.graphics.printf(graphsToBeDrawn[aGraph], currentLocationX, currentLocationY+68, pPWidth, 'center')
+
+				local theLabelToBePrinted = ""
+				if aGraph == 13 then
+					love.graphics.setColor(UI.color.state)
+					theLabelToBePrinted = "today"
+
+				elseif aGraph == 5 then
+					love.graphics.setColor(0, 0, 170, 255)
+					theLabelToBePrinted = "last month"
+
+				elseif aGraph == 4 then
+					love.graphics.setColor(0, 0, 170, 255)
+					theLabelToBePrinted = "last 6 months"
+
+				elseif aGraph == 3 then
+					love.graphics.setColor(UI.color.aproxTime)
+					theLabelToBePrinted = "last year"
+
+				elseif aGraph == 2 then
+					love.graphics.setColor(UI.color.aproxTime)
+					theLabelToBePrinted = "last 5 years"
+
+				elseif aGraph == 1 then
+					love.graphics.setColor(UI.color.aproxTime)
+					theLabelToBePrinted = "ever"
+
+				else
+					if aGraph == 12 then theLabelToBePrinted = (13-aGraph).." day ago" else
+					theLabelToBePrinted = (13-aGraph).." days ago" end
+					love.graphics.setColor(UI.color.mandatoryTill)
+				end
+
+				love.graphics.setFont(evenSmallerFont)
+				love.graphics.printf(theLabelToBePrinted, currentLocationX-10, currentLocationY+defaultBiggestPPHeight+5, pPWidth+20, 'center')
+
+				for rectangleDrawn = 1, graphsToBeDrawn[aGraph], 1 do
+					love.graphics.rectangle('fill', currentLocationX, currentLocationY, pPWidth, defaultBiggestPPHeight-2)
+					currentLocationY = currentLocationY - defaultBiggestPPHeight
+				end
+
+			end
+
+			love.graphics.setCanvas()
+
+		end
 
 
 	elseif ticketInventoryOpen == true then
@@ -4315,9 +4691,9 @@ function love.update(dt)
 			keyboardInput = false
 			if keyboardClipboard ~= nil and keyboardClipboard ~= "" then
 				local theInputText = string.match(keyboardClipboard, '[0-9]')
-				keyboardClipboard = tonumber(keyboardClipboard)
+				theInputText = tonumber(keyboardClipboard)
 				if completingAGoalWay == "add" then
-					keyboardTable.measurement.doneSoFar = keyboardTable.measurement.doneSoFar + keyboardClipboard
+					keyboardTable.measurement.doneSoFar = keyboardTable.measurement.doneSoFar + theInputText
 					if keyboardTable.measurement.doneSoFar>=keyboardTable.measurement.amountTotal then
 						keyboardTable.fullyCompleted = true
 						save()
@@ -4346,7 +4722,7 @@ function love.update(dt)
 						completingAGoal = false
 					end
 				else
-					keyboardTable.measurement.doneSoFar = keyboardClipboard
+					keyboardTable.measurement.doneSoFar = theInputText
 					if keyboardTable.measurement.doneSoFar>=keyboardTable.measurement.amountTotal then
 						keyboardTable.fullyCompleted = true
 						save()
@@ -4519,6 +4895,23 @@ function love.keypressed(key, unicode)
 			if updateNotesShown == true then
 				updateNotesShown = false
 
+			elseif pPPointsShown == true then
+
+				pPPointsShown = false
+				addClickingBoxes = true
+				clickingBox = {}--has to be emptied every tim
+
+				ticketVaultOpen = false
+
+				ticketInventoryOpen = false
+				editingGoals = false
+				editingTicket=false
+				viewingGoals = false
+				--keyboardInput = false
+				completingAGoal = false
+				asIfReturnWasPressed = true
+				editingDescription = false
+
 			elseif editingTicket == true then
 
 				addClickingBoxes = true
@@ -4548,6 +4941,7 @@ function love.keypressed(key, unicode)
 				completingAGoal = false
 
 			elseif addingSmartGoal or addingDumbGoal then
+				clickingBox = {}
 				addingSmartGoal = false
 				addingDumbGoal = false
 
@@ -4637,9 +5031,23 @@ function love.keypressed(key, unicode)
 							keyboardTable.measurement.doneSoFar = keyboardTable.measurement.doneSoFar + keyboardClipboard
 							if keyboardTable.measurement.doneSoFar>=keyboardTable.measurement.amountTotal then
 								keyboardTable.fullyCompleted = true
+
+
+								local currentDay = tonumber(os.date("%d"))
+								local currentMonth = tonumber(os.date("%m"))
+								local currentYear = tonumber(os.date("%Y"))
+								productivityPts[currentYear][currentMonth][currentDay] = productivityPts[currentYear][currentMonth][currentDay] + 1
+
 								save()
 							else
 								keyboardTable.partlyCompleted = true
+
+								local currentDay = tonumber(os.date("%d"))
+								local currentMonth = tonumber(os.date("%m"))
+								local currentYear = tonumber(os.date("%Y"))
+
+								productivityPts[currentYear][currentMonth][currentDay] = productivityPts[currentYear][currentMonth][currentDay] + 1
+
 								save()
 							end
 

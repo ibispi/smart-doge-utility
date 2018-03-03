@@ -2,6 +2,8 @@
 
 ![icon](https://i.imgur.com/efTC38v.png)
 
+### WARNING: Very likely buggy
+
 SmartDogeUtility is a program made in [LÖVE](http://love2d.org) which purpose is to increase your productivity through the use of [smart](https://en.wikipedia.org/wiki/SMART_criteria) goals and conditioning.
 SmartDogeUtility is a program primarily made to be used on smartphones, however it also
 works on desktop devices and other platforms supported by [LÖVE](http://love2d.org). Doges recommend [LÖVE](http://love2d.org).
@@ -9,7 +11,7 @@ works on desktop devices and other platforms supported by [LÖVE](http://love2d.
 ![dogs](https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Cassius_Marcellus_Coolidge_-_Poker_Game_%281894%29.png/289px-Cassius_Marcellus_Coolidge_-_Poker_Game_%281894%29.png "An image of smart doges.")
 
 # HOW TO BE A SMART DOGE 101:
-
+---
 ## SMART goals
 
 The main purpose of smartDogeUtility is to set and track smart goals.
@@ -39,13 +41,13 @@ To further enforce the effect of conditioning, one may also want to include a ti
 
 # Download
 
-## [WinDoges](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.2/WinDogeUtility_0.0.2.zip)
-## [Apple Doges](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.2/smartDogeUtility_0.0.2_Apples.zip)
-## [Linux Doges](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.2/smartDogeUtility_0.0.2.love) (requires [LÖVE](http://love2d.org) to be installed)
+## [WinDoges](https://www.dropbox.com/s/i7cllblo9sg3v37/smartDogeUtilityEXE_0.0.1.zip?dl=0)
+## [Apple Doges](https://www.dropbox.com/s/3pqe1a405dyfs79/smartDogeUtilityOSX_0.0.1.zip?dl=0)
+## [Linux Doges](https://www.dropbox.com/s/crviykkjlufmwtw/smartDogeUtility.love?dl=0) (requires [LÖVE](http://love2d.org) to be installed)
 
 # Smartphone? Smartdoge! Smartphone!
 
-Download the [love file](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.2/smartDogeUtility_0.0.2.love) and transfer it to your smartphone. You need to download the love2d app from the playstore to run it.
+Download the [love file](https://www.dropbox.com/s/crviykkjlufmwtw/smartDogeUtility.love?dl=0) and transfer it to your smartphone. You need to download the love2d app from the playstore to run it.
 
 ---
 # Credits

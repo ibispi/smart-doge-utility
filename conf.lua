@@ -5,6 +5,8 @@ function love.conf(t)
     t.accelerometerjoystick = false      -- Enable the accelerometer on iOS and Android by exposing it as a Joystick (boolean)
     t.gammacorrect = false         -- Enable gamma-correct rendering, when supported by the system (boolean)
 
+    t.externalstorage = true
+
     t.window.title = "smartDogeUtility"  -- The window title (string)
     t.window.icon = "smartDogeIcon.png"                -- Filepath to an image to use as the window's icon (string)
     t.window.width = 800              -- The window width (number)

@@ -6,6 +6,9 @@ function starterpack ()
 
 --------------------------------------------------------------------------------
 --LIBRARIES
+
+  serializer = require "0modules0.serial"
+
 	addTimers = require "0modules0.addTimers" addTimers(100)-- this function is run only once
 	timerCheck = require "0modules0.timerCheck" --this is among the love.update loops in main.lua
 	startTimer = require "0modules0.startTimer"
@@ -98,14 +101,12 @@ end
 		local hailingString = "Smart doges wish you a Happy New Year!"
 	end
 
-	local versionString = "0.0.2"
+	local versionString = "0.0.3"
 	local introString = hailingString..newLineString..newLineString.."Version "..versionString.." update notes:"
 	updateNotes = {
-		"this 'version update notes' screen has been added",
-		"the default new-goal variables have been changed from '0/1000 words' to '0/1 things'",
-		"a bug that activated the smartphone keyboard whenever a goal was re-enabled has been fixed",
-		"a bug that made already completed dumb goals reward the player upon restarting the app has been fixed",
-		"a bug that showed boxes on Windows whenever new lines were entered during keyboard input has been fixed",
+		"A productivity points functionality has been added",
+		"Every time you complete a goal a point will be added to the day when you did this",
+		"When you click on the graph button you can see how much better you are (or worse) at completing goals",
 	}
 
 	updateString = introString
