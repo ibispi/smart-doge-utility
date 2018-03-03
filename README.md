@@ -38,12 +38,19 @@ The general idea is that certain activities one aims to do are not as interestin
 To further enforce the effect of conditioning, one may also want to include a ticket that doesn't give you any sort of reward. It is scientifically proven that if a person is rewarded randomly, sometimes yes, sometimes not, the addiction becomes stronger. Stay strong, my doges.
 
 ---
+## Productivity Points
+
+Every time you complete a goal you gain a productivity point for that day so you can measure it with your achievements from earlier.
+
+![productivity graphs](https://i.imgur.com/hW0kvBI.png)
+
+---
 
 # Download
 
-## [WinDoges](https://www.dropbox.com/s/i7cllblo9sg3v37/smartDogeUtilityEXE_0.0.1.zip?dl=0)
-## [Apple Doges](https://www.dropbox.com/s/3pqe1a405dyfs79/smartDogeUtilityOSX_0.0.1.zip?dl=0)
-## [Linux Doges](https://www.dropbox.com/s/crviykkjlufmwtw/smartDogeUtility.love?dl=0) (requires [LÖVE](http://love2d.org) to be installed)
+## [WinDoges](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.3/winDoges_0.0.3.zip)
+## [Apple Doges](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.3/smartDogeUtility_0.0.3_Apples.zip)
+## [Linux Doges](https://github.com/ibispi/smart-doge-utility/releases/download/0.0.3/smartDogeUtility.love) (requires [LÖVE](http://love2d.org) to be installed)
 
 # Smartphone? Smartdoge! Smartphone!
 
